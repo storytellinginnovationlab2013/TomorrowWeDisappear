@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Tomorrow We Disappear</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/siteLayout.css">
+			
+		<!-- Cannot Change!-->
+		<script src="js/libs/popcorn.js"></script>
+		<script src="js/libs/popcorn._MediaElementProto.js"></script>
+		<script src="js/libs/popcorn.HTMLNullVideoElement.js"></script>
+		<!-- Cannot Change!-->
+		
+		<script src="js/libs/popcorn-base.js"></script>
+		<script src="js/scenePlugin.js"></script>
+		<Script src="js/musicPlugin.js"></Script>
+		
+		<script src="js/libs/jquery-1.9.1.min.js"></script>
+
+		<script src="js/libs/three.min.js"></script>
+
+		<script src="js/libs/tween.min.js"></script>
+		<script src="js/renderers/CSS3DRenderer.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+		
+		<script src="js/utils.js"></script>
+        <script src="js/animations.js"></script>
+		<script src="js/3Dmain.js"></script>
+
+		<script src="js/resourceLibrary.js"></script>
+		<script src="js/documentary.js"></script>
+		<script src="js/controlBar.js"></script>
+		
+		<style>
+			#controller {
+				background: magenta;
+				position: absolute;
+				left: 10%;
+				bottom: 5%;
+				width: 80%;
+			}
+			@font-face{
+				font-family: 'News Gothic';
+			    src: url('News-Gothic-Extra-Condensed-BT.ttf');
+			}
+			body {
+				color: #808080;
+				font-family: News Gothic, Garamond, serif;
+				font-size:13px;
+
+				background-color: #000000;
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+
+	        canvas
+	        {
+	            pointer-events: none;
+	            z-index: 10;
+	        }
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+			#loadtext{
+				position: absolute;
+				top: 100px; width: 100%;
+				font-size: 20px;
+			}
+
+			#speedSlider {
+				width: 50%;
+			}
+
+			.center	{
+				margin-left:auto;
+				margin-right:auto;
+				width:70%;
+				background-color:#b0e0e6;
+			}
+	        
+	        #container
+	        {
+	            background: #000;
+	            width: 100%;
+	            height: 100%;
+	            margin: 0 auto;
+	            overflow: hidden;
+	        }
+			
+			.resource{
+				/*background: rgba(0,0,128,0.1);*/
+			}
+			.resource > *{
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+        <script type="text/javascript">
+            // Wait for the page to load first
+            window.onload = function()
+            {
+                var takeAction = document.getElementById("take-action");
+                takeAction.onclick = function()
+                {
+                    //THREE.removeAll();
+                    Tweener( threeD.camCTRL.position, {y:3000}, 5000);
+                    //threeD.camCTRL.position.y =3000;
+                    Tweener( threeD.camCTRL.position, {z:-7000}, 5000);
+                    //threeD.camCTRL.position.z=-7000;
+                    Tweener( threeD.camCTRL.rotation, {y:180 * (Math.PI / 180 )}, 5000);
+                    //threeD.camCTRL.rotation.y=180 * (Math.PI / 180 );
+                    Tweener( threeD.camera.rotation, {x:-30 * (Math.PI / 180 )}, 5000);
+                    //threeD.camera.rotation.x = -30 * (Math.PI/180);
+                    threeD.ZOOM = 1;
+                    return false;
+                }
+                var share = document.getElementById("share");
+                share.onclick = function()
+                {
+                    //THREE.removeAll();
+                    Tweener( threeD.camCTRL.position, {y:0}, 3000);
+                    //threeD.camCTRL.position.y =3000;
+                    Tweener( threeD.camCTRL.position, {z:-1}, 3000);
+                    //threeD.camCTRL.position.z=-7000;
+                    Tweener( threeD.camCTRL.rotation, {y:0}, 3000);
+                    //threeD.camCTRL.rotation.y=180 * (Math.PI / 180 );
+                    Tweener( threeD.camera.rotation, {x:0}, 3000);
+                    threeD.ZOOM = 0;
+                    return false;
+                }
+            }
+        </script>
+	</head>
+
+	<body>
+		
+	<header id="header">
+		<a id="home-button">TWD</a>
+		<div id="social-mute">
+			<a id="take-action" href="#">Take Action</a>
+			<a id="share" href="#">Share</a>
+			<img id="mute" src="images/layout/speaker.png" />
+		</div>
+	</header>
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+	<div id="content">
+		<div id="loadtext"></div>
+		<div id="container"></div>
+		<!--<div id="info">Tomorrow We Disappear</div>-->
+	</div>
+	<footer id="footer">
+		<div id="control-bar-background"></div>
+		<div id="stripes"></div>
+		<div id="control-bar">
+			<img id="play" src="images/layout/play.png" />
+			<div id="timeline">
+				<img id="play-head" src="images/layout/playHead.png" />
+				<img id="past" src="images/layout/past.png" />
+				<img id="future" src="images/layout/future.png" />
+			</div>
+		</div>
+	</footer>
+	<div id="audio">
+		<audio id="audio1">
+			<!--<source id="audio1Ogg" type="audio/ogg">
+			<source id="audio1Mpeg" type="audio/mpeg">-->
+		</audio>
+		<audio id="audio2">
+			<!--<source id="audio2Ogg" type="audio/ogg">
+			<source id="audio2Mpeg" type="audio/mpeg">-->
+		</audio>
+	</div>
+	<script>
+		var htmlConfiguration = {
+			containerId: 'container',
+			resourceHandler: threeD
+		}
+	</script>
+	</body>
+</html>
